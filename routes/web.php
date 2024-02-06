@@ -18,9 +18,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::get('/', function () {
+return view('adminpanel.master');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware(['auth', 'role:admin'])->name('admin.')->prefix('admin')->group(function () {
+    Route::resource('roles',\App\Http\Controllers\Admin\RoleController::class);
+    Route::post('role/{role}/permissions',[\App\Http\Controllers\Admin\RoleController::class,'givePermission'])->name('role.permissions');
+    Route::resource('permissions',\App\Http\Controllers\Admin\PermissionController::class);
+
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
