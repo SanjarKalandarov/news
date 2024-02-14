@@ -20,12 +20,17 @@
             <h2 class="text-2xl font-semibold">
                 Role Permissions
             </h2>
-            <div class="mt-4">
+            <div class="flex mt-4">
 
                 @if($role->permissions)
-
+{{--@dd($role->permissions)--}}
                     @foreach($role->permissions as $permission)
-                        <span>{{$permission->name}}</span>
+                        <form action="{{route('admin.role.permissions.revoke',[$role->id,$permission->id])}}" method="post">
+                            @csrf
+                            @method("DELETE")
+                            <button type="submit" class="btn btn-danger m-2">{{$permission->name}}</button>
+                        </form>
+
 
                     @endforeach
                 @endif
